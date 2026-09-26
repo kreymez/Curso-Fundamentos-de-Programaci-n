@@ -1,4 +1,3 @@
-```python
 # Bicycle Shop Control System
 # Object-Oriented Programming - Encapsulation
 
