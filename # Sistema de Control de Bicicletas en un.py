@@ -1,100 +1,112 @@
-# Sistema de Control de Bicicletas en un Taller
-# Programación Orientada a Objetos - Encapsulación
+```python
+# Bicycle Shop Control System
+# Object-Oriented Programming - Encapsulation
 
-class BicicletaTaller:
+class BicycleWorkshop:
 
-    def __init__(self, serial, costo_por_hora):
+    def __init__(self, serial, cost_per_hour):
         self._serial = serial
-        self._hora_ingreso = None
-        self._hora_salida = None
-        self._costo_por_hora = costo_por_hora
+        self._entry_time = None
+        self._exit_time = None
+        self._cost_per_hour = cost_per_hour
 
-    # Guarda la hora en que llega la bicicleta
-    def registrar_ingreso(self, hora):
-        self._hora_ingreso = hora
+    # Saves the time when the bicycle arrives
+    def register_entry(self, time):
+        self._entry_time = time
 
-    # Guarda la hora en que se retira la bicicleta
-    def registrar_salida(self, hora):
-        if hora <= self._hora_ingreso:
-            print("La hora de salida debe ser mayor a la de ingreso")
+    # Saves the time when the bicycle is picked up
+    def register_exit(self, time):
+        if time <= self._entry_time:
+            print("Exit time must be greater than entry time.")
             return False
-        self._hora_salida = hora
+
+        self._exit_time = time
         return True
 
-    # Calcula lo que se debe pagar segun las horas que estuvo la bici
-    def calcular_total(self, hora_salida):
-        if hora_salida <= self._hora_ingreso:
-            print("La hora de salida debe ser mayor a la de ingreso")
+    # Calculates the total cost based on the time the bicycle stayed
+    def calculate_total(self, exit_time):
+        if exit_time <= self._entry_time:
+            print("Exit time must be greater than entry time.")
             return None
-        horas = hora_salida - self._hora_ingreso
-        total = horas * self._costo_por_hora
+
+        hours = exit_time - self._entry_time
+        total = hours * self._cost_per_hour
         return total
 
-    def obtener_serial(self):
+    def get_serial(self):
         return self._serial
 
 
-# lista donde se van a guardar todas las bicicletas registradas
-bicicletas = []
+# List where all registered bicycles are stored
+bicycles = []
 
 
-def registrar_bicicleta():
-    serial = input("Serial de la bicicleta: ")
-    hora_ingreso = float(input("Hora de ingreso: "))
-    costo = float(input("Costo por hora: "))
+def register_bicycle():
+    serial = input("Bicycle serial number: ")
+    entry_time = float(input("Entry time: "))
+    cost = float(input("Cost per hour: "))
 
-    bici = BicicletaTaller(serial, costo)
-    bici.registrar_ingreso(hora_ingreso)
-    bicicletas.append(bici)
-    print("Bicicleta registrada")
+    bicycle = BicycleWorkshop(serial, cost)
+    bicycle.register_entry(entry_time)
+    bicycles.append(bicycle)
+
+    print("Bicycle registered successfully.")
 
 
-def buscar_bicicleta(serial):
-    for bici in bicicletas:
-        if bici.obtener_serial() == serial:
-            return bici
+def find_bicycle(serial):
+    for bicycle in bicycles:
+        if bicycle.get_serial() == serial:
+            return bicycle
+
     return None
 
 
-def registrar_salida():
-    serial = input("Serial de la bicicleta que sale: ")
-    bici = buscar_bicicleta(serial)
+def register_exit():
+    serial = input("Serial number of the bicycle leaving: ")
+    bicycle = find_bicycle(serial)
 
-    if bici == None:
-        print("No existe una bicicleta con ese serial")
+    if bicycle is None:
+        print("There is no bicycle with that serial number.")
         return
 
-    hora_salida = float(input("Hora de salida: "))
+    exit_time = float(input("Exit time: "))
 
-    if bici.registrar_salida(hora_salida):
-        total = bici.calcular_total(hora_salida)
-        print("El costo total a pagar es:", total)
-
-
-def mostrar_bicicletas():
-    if len(bicicletas) == 0:
-        print("No hay bicicletas registradas")
-    for bici in bicicletas:
-        print("Serial:", bici.obtener_serial())
+    if bicycle.register_exit(exit_time):
+        total = bicycle.calculate_total(exit_time)
+        print("Total amount to pay:", total)
 
 
-# menu principal del programa
-opcion = 0
-while opcion != 4:
-    print("\n1. Registrar ingreso de bicicleta")
-    print("2. Registrar salida y calcular costo")
-    print("3. Ver bicicletas registradas")
-    print("4. Salir")
+def show_bicycles():
+    if len(bicycles) == 0:
+        print("No bicycles registered.")
 
-    opcion = int(input("Elija una opcion: "))
+    for bicycle in bicycles:
+        print("Serial number:", bicycle.get_serial())
 
-    if opcion == 1:
-        registrar_bicicleta()
-    elif opcion == 2:
-        registrar_salida()
-    elif opcion == 3:
-        mostrar_bicicletas()
-    elif opcion == 4:
-        print("Fin del programa")
+
+# Main program menu
+option = 0
+
+while option != 4:
+
+    print("\n1. Register bicycle entry")
+    print("2. Register bicycle exit and calculate cost")
+    print("3. View registered bicycles")
+    print("4. Exit")
+
+    option = int(input("Choose an option: "))
+
+    if option == 1:
+        register_bicycle()
+
+    elif option == 2:
+        register_exit()
+
+    elif option == 3:
+        show_bicycles()
+
+    elif option == 4:
+        print("End of program.")
+
     else:
-        print("Opcion invalida")
+        print("Invalid option.")
